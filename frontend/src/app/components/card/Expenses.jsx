@@ -1,7 +1,9 @@
 export const ExpensesCard = () => {
   return (
-    <div className="w-[384px] h-[216px] bg-white rounded-[12px]">
-      <div className="w-full border pt-[56px] rounded-t-[12px]"></div>
+    <div className="flex w-[30%] flex-col lg:flex-row ">
+      <div className="card bg-base-300 rounded-box grid h-[250px] flex-grow place-items-center">
+        content
+      </div>
     </div>
   );
 };
