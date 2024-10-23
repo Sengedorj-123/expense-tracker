@@ -1,10 +1,9 @@
 import { CashCard } from "../card/Cash";
 import { ExpensesCard } from "../card/Expenses";
 import { IncomeCard } from "../card/Income";
-import { RecordCard } from "../card/Record";
+
 import { ExpenseGraphic } from "../graphic/Expense";
 import { IncomeGraphic } from "../graphic/Income";
-import { HeaderPart } from "./Header";
 
 export const DashboardPage = () => {
   return (
@@ -19,9 +18,9 @@ export const DashboardPage = () => {
           <IncomeGraphic />
           <ExpenseGraphic />
         </div>
-        <div className="pt-[30px]">
-          <RecordCard />
-        </div>
+      </div>
+      <div className="pt-[30px]">
+        <div className="card bg-white rounded-box grid h-[600px] flex-grow place-items-center "></div>
       </div>
     </div>
   );

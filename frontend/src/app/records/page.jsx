@@ -1,9 +1,13 @@
+import { HeaderPart } from "../components/pages/Header";
 import { RecordsPage } from "../components/pages/Records";
 
 export default function Records() {
   return (
     <div>
-      <RecordsPage />
+      <HeaderPart />
+      <div className="bg-[#F3F4F6]">
+        <RecordsPage />
+      </div>
     </div>
   );
 }

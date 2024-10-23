@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td {
+  padding: 10px 0;
+}
+
+p {
+  font-size: 12px;
+  color: #666;
+}

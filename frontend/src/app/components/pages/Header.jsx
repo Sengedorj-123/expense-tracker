@@ -5,7 +5,9 @@ export const HeaderPart = () => {
   return (
     <div className="flex container m-auto justify-between items-center pt-[20px] bg-white pb-[30px]">
       <div className="flex gap-10">
-        <GeldIcon />
+        <Link href={`/`}>
+          <GeldIcon />
+        </Link>
         <Link href={`dashboard`}>
           <h1>Dashboard</h1>
         </Link>
