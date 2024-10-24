@@ -1,60 +1,215 @@
+"use client";
+
+import { useState } from "react";
+import dayjs from "dayjs";
+
 export const RecordCard = () => {
+  const [isExpense, setIsExpense] = useState(true);
+  const [records, setRecords] = useState([]);
+
+  const openModal = () => {
+    document.getElementById("my_modal_4").showModal();
+  };
+
+  const closeModal = () => {
+    document.getElementById("my_modal_4").close();
+  };
+
+  const addRecord = (e) => {
+    e.preventDefault();
+    const newRecord = {
+      category: e.target.category.value,
+      amount: e.target.amount.value,
+      date: e.target.date.value,
+      time: e.target.time.value,
+      isExpense,
+    };
+    setRecords([newRecord, ...records]);
+    closeModal();
+  };
+
+  const groupRecordsByDate = () => {
+    const today = dayjs().format("YYYY-MM-DD");
+    const yesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD");
+
+    const todayRecords = records.filter((record) => record.date === today);
+    const yesterdayRecords = records.filter(
+      (record) => record.date === yesterday
+    );
+
+    return { todayRecords, yesterdayRecords };
+  };
+
+  const { todayRecords, yesterdayRecords } = groupRecordsByDate();
+
   return (
-    <div className="pb-[50px]">
-      <div className="w-[full] h-[920px] bg-white rounded-[12px] flex flex-col gap-[20px] p-[20px] ">
-        <h1 className="text-[24px] font-[600]">Records</h1>
-        <button className="btn btn-outline btn-info">+ Add</button>
-        <label className="input input-bordered flex items-center gap-2">
-          <input type="text" className="grow" placeholder="Search" />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path
-              fillRule="evenodd"
-              d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </label>
-        <div className="flex flex-col gap-[20px]">
-          <h1>Type</h1>
-          <div className="flex gap-[10px]">
-            <input
-              type="checkbox"
-              defaultChecked
-              className="checkbox rounded-full w-[20px] h-[20px]"
-            />
-            <h1>All</h1>
+    <div className="pb-10">
+      <div className="w-full h-auto bg-white rounded-lg flex flex-col gap-6 p-6">
+        <h1 className="text-2xl font-semibold">Records</h1>
+
+        <button className="btn btn-primary" onClick={openModal}>
+          Add Record
+        </button>
+
+        <dialog id="my_modal_4" className="modal">
+          <div className="modal-box max-w-lg p-8 rounded-lg shadow-lg relative">
+            <div className="flex justify-between items-center border-b pb-4 mb-4">
+              <h3 className="text-xl font-bold">Add Record</h3>
+              <button
+                className="absolute top-4 right-4 text-lg"
+                onClick={closeModal}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="flex items-center justify-center mb-6">
+              <div className="bg-gray-200 rounded-full p-1 flex">
+                <button
+                  className={`${
+                    isExpense
+                      ? "bg-blue-600 text-white"
+                      : "bg-transparent text-gray-600"
+                  } w-[120px] h-10 rounded-full transition-all`}
+                  onClick={() => setIsExpense(true)}
+                >
+                  Expense
+                </button>
+                <button
+                  className={`${
+                    !isExpense
+                      ? "bg-green-600 text-white"
+                      : "bg-transparent text-gray-600"
+                  } w-[120px] h-10 rounded-full transition-all`}
+                  onClick={() => setIsExpense(false)}
+                >
+                  Income
+                </button>
+              </div>
+            </div>
+
+            <form className="grid grid-cols-2 gap-6" onSubmit={addRecord}>
+              <div className="col-span-2">
+                <label className="block text-gray-600 mb-2">Amount</label>
+                <input
+                  type="text"
+                  name="amount"
+                  placeholder="$ 000.00"
+                  className="input input-bordered w-full"
+                  required
+                />
+              </div>
+
+              <div className="col-span-2">
+                <label className="block text-gray-600 mb-2">Category</label>
+                <input
+                  type="text"
+                  name="category"
+                  placeholder="Category"
+                  className="input input-bordered w-full"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-600 mb-2">Date</label>
+                <input
+                  type="date"
+                  name="date"
+                  className="input input-bordered w-full"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-600 mb-2">Time</label>
+                <input
+                  type="time"
+                  name="time"
+                  className="input input-bordered w-full"
+                  required
+                />
+              </div>
+
+              <div className="col-span-2">
+                <label className="block text-gray-600 mb-2">Note</label>
+                <textarea
+                  className="textarea textarea-bordered w-full"
+                  name="note"
+                  placeholder="Write here"
+                ></textarea>
+              </div>
+
+              <div className="modal-action col-span-2 flex justify-end mt-4">
+                <button
+                  type="submit"
+                  className={`${ 
+                    !isExpense
+                      ? "bg-green-600 text-white"
+                      : "bg-blue-600 text-white"
+                  } w-[120px] h-10 rounded-full transition-all`}
+                >
+                  Add Record
+                </button>
+              </div>
+            </form>
           </div>
-          <div className="flex gap-[10px]">
-            <input
-              type="checkbox"
-              defaultChecked
-              className="checkbox rounded-full w-[20px] h-[20px]"
-            />
-            <h1>Income</h1>
-          </div>{" "}
-          <div className="flex gap-[10px]">
-            <input
-              type="checkbox"
-              defaultChecked
-              className="checkbox rounded-full w-[20px] h-[20px]"
-            />
-            <h1>Expense</h1>
-          </div>
-        </div>
-        <div>
-          <div className="flex justify-between">
-            <h1>Category</h1>
-            <h1>Clear</h1>
-          </div>
-          <div className="flex gap-[10px] items-center ">
-            <h1 className="text-blue-600 text-[25px]">+</h1>
-            <h1>Add Category</h1>
-          </div>
+        </dialog>
+
+        <div className="mt-6">
+          {todayRecords.length > 0 && (
+            <>
+              <h2 className="text-lg font-bold">Today</h2>
+              <div className="flex flex-col gap-4 mt-2">
+                {todayRecords.map((record, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-center p-4 bg-gray-100 rounded-md"
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="bg-red-500 text-white p-2 rounded-full">
+                        🍽️
+                      </span>
+                      <div>
+                        <p className="font-semibold">{record.category}</p>
+                        <p className="text-sm text-gray-500">{record.time}</p>
+                      </div>
+                    </div>
+                    <div className="text-red-500 font-bold">
+                      - $ {record.amount}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {yesterdayRecords.length > 0 && (
+            <>
+              <h2 className="text-lg font-bold mt-6">Yesterday</h2>
+              <div className="flex flex-col gap-4 mt-2">
+                {yesterdayRecords.map((record, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-center p-4 bg-gray-100 rounded-md"
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="bg-red-500 text-white p-2 rounded-full">
+                        🍽️
+                      </span>
+                      <div>
+                        <p className="font-semibold">{record.category}</p>
+                        <p className="text-sm text-gray-500">{record.time}</p>
+                      </div>
+                    </div>
+                    <div className="text-red-500 font-bold">
+                      - $ {record.amount}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

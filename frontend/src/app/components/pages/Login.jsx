@@ -11,7 +11,7 @@ export const LoginPage = () => {
             <GeldIcon />
             <h1>Geld</h1>
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center font-[600] text-[25px]">
             <h1>Welcome Back</h1>
           </div>
           <h2>Welcome back, Please enter your details</h2>
@@ -39,7 +39,7 @@ export const LoginPage = () => {
             </label>
             <button
               type="submit"
-              className="w-[350px] btn bg-[#0166FF] rounded-[20px]"
+              className="w-[350px] btn bg-[#0166FF] rounded-[20px] text-white"
             >
               Log In
             </button>

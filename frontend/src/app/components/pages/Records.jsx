@@ -4,7 +4,7 @@ export const RecordsPage = () => {
   return (
     <div className="container m-auto pt-[50px] flex">
       <div className="w-[25%]">
-        <RecordCard />
+        <RecordCard />.
       </div>
       <div className="pl-[50px] w-[75%]">
         <div className="flex justify-between ">
@@ -84,3 +84,4 @@ export const RecordsPage = () => {
     </div>
   );
 };
+

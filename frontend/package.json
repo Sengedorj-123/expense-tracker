@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "dayjs": "^1.11.13",
     "next": "15.0.0",
+    "nodemon": "^3.1.7",
     "react": "19.0.0-rc-65a56d0e-20241020",
     "react-dom": "19.0.0-rc-65a56d0e-20241020"
   },
