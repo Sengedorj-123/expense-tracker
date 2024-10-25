@@ -143,7 +143,7 @@ export const RecordCard = () => {
               <div className="modal-action col-span-2 flex justify-end mt-4">
                 <button
                   type="submit"
-                  className={`${ 
+                  className={`${
                     !isExpense
                       ? "bg-green-600 text-white"
                       : "bg-blue-600 text-white"

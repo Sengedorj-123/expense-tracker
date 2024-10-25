@@ -1,9 +1,9 @@
-import { SignPage } from "../components/pages/Sign";
+import { SignPage, Signup } from "../components/pages/Sign";
 
 export default function SignUp() {
   return (
     <div>
-      <SignPage />
+      <Signup />
     </div>
   );
 }

@@ -119,16 +119,15 @@
 //   );
 // };
 "use client";
-import Dashboard from "@/app/dashboard/page";
-import { GeldIcon } from "../icons/Geld";
 import Link from "next/link";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { GeldIcon } from "../components/icons/Geld";
 
-export const Login = () => {
+const Page = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
@@ -246,3 +245,5 @@ export const Login = () => {
     </div>
   );
 };
+
+export default Page;
