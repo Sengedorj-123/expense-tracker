@@ -1,216 +1,227 @@
 "use client";
 
-import { useState } from "react";
-import dayjs from "dayjs";
+import React, { useState } from "react";
+import { Type } from "./Type";
 
-export const RecordCard = () => {
-  const [isExpense, setIsExpense] = useState(true);
-  const [records, setRecords] = useState([]);
+export const RecordCard = ({ onAddRecord }) => {
+  const [transactionType, setTransactionType] = useState("EXP");
+  const [records, setRecords] = useState({
+    name: "",
+    amount: "",
+    transaction_type: transactionType,
+    category_id: "",
+    description: "",
+    createdat: "",
+    createdatTime: "",
+  });
 
-  const openModal = () => {
-    document.getElementById("my_modal_4").showModal();
+  const toggleTransactionType = (type) => {
+    setTransactionType(type);
+    setRecords((prev) => ({ ...prev, transaction_type: type }));
   };
 
-  const closeModal = () => {
-    document.getElementById("my_modal_4").close();
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setRecords((prevRecords) => ({ ...prevRecords, [name]: value }));
   };
 
-  const addRecord = (e) => {
-    e.preventDefault();
-    const newRecord = {
-      category: e.target.category.value,
-      amount: e.target.amount.value,
-      date: e.target.date.value,
-      time: e.target.time.value,
-      isExpense,
-    };
-    setRecords([newRecord, ...records]);
-    closeModal();
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch(`http://localhost:3030/records`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(records),
+      });
+
+      if (!response.ok)
+        throw new Error(`HTTP error! Status: ${response.status}`);
+
+      const data = await response.json();
+      console.log("Record added successfully:", data);
+      onAddRecord(data);
+
+      setRecords({
+        name: "",
+        amount: "",
+        transaction_type: transactionType,
+        category_id: "",
+        description: "",
+        createdat: "",
+        createdatTime: "",
+      });
+
+      document.getElementById("my_modal_record").close();
+    } catch (error) {
+      console.error("Error adding record:", error);
+    }
   };
-
-  const groupRecordsByDate = () => {
-    const today = dayjs().format("YYYY-MM-DD");
-    const yesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD");
-
-    const todayRecords = records.filter((record) => record.date === today);
-    const yesterdayRecords = records.filter(
-      (record) => record.date === yesterday
-    );
-
-    return { todayRecords, yesterdayRecords };
-  };
-
-  const { todayRecords, yesterdayRecords } = groupRecordsByDate();
 
   return (
-    <div className="pb-10">
-      <div className="w-full h-auto bg-white rounded-lg flex flex-col gap-6 p-6">
-        <h1 className="text-2xl font-semibold">Records</h1>
+    <div className="flex min-h-screen bg-gray-100">
+      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 mx-auto">
+        <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">
+          Add Record
+        </h2>
 
-        <button className="btn btn-primary" onClick={openModal}>
+        <button
+          className="mb-4 py-2 px-4 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition duration-200  w-full"
+          onClick={() => document.getElementById("my_modal_record").showModal()}
+        >
           Add Record
         </button>
 
-        <dialog id="my_modal_4" className="modal">
-          <div className="modal-box max-w-lg p-8 rounded-lg shadow-lg relative">
-            <div className="flex justify-between items-center border-b pb-4 mb-4">
-              <h3 className="text-xl font-bold">Add Record</h3>
+        <dialog id="my_modal_record" className="modal">
+          <div className="modal-box rounded-lg shadow-lg p-4">
+            <form method="dialog" onSubmit={handleFormSubmit}>
               <button
-                className="absolute top-4 right-4 text-lg"
-                onClick={closeModal}
+                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                type="button"
+                onClick={() =>
+                  document.getElementById("my_modal_record").close()
+                }
               >
                 ✕
               </button>
-            </div>
+              <h3 className="font-bold text-lg text-center mb-4 text-gray-900">
+                Add New Record
+              </h3>
 
-            <div className="flex items-center justify-center mb-6">
-              <div className="bg-gray-200 rounded-full p-1 flex">
+              <div className="flex mb-4">
                 <button
-                  className={`${
-                    isExpense
-                      ? "bg-blue-600 text-white"
-                      : "bg-transparent text-gray-600"
-                  } w-[120px] h-10 rounded-full transition-all`}
-                  onClick={() => setIsExpense(true)}
+                  className={`flex-1 py-2 font-semibold rounded-l-lg transition duration-200 ${
+                    transactionType === "EXP"
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                  type="button"
+                  onClick={() => toggleTransactionType("EXP")}
                 >
                   Expense
                 </button>
                 <button
-                  className={`${
-                    !isExpense
-                      ? "bg-green-600 text-white"
-                      : "bg-transparent text-gray-600"
-                  } w-[120px] h-10 rounded-full transition-all`}
-                  onClick={() => setIsExpense(false)}
+                  className={`flex-1 py-2 font-semibold rounded-r-lg transition duration-200 ${
+                    transactionType === "INC"
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                  type="button"
+                  onClick={() => toggleTransactionType("INC")}
                 >
                   Income
                 </button>
               </div>
-            </div>
 
-            <form className="grid grid-cols-2 gap-6" onSubmit={addRecord}>
-              <div className="col-span-2">
-                <label className="block text-gray-600 mb-2">Amount</label>
+              <div className="mb-4">
+                <label className="block text-gray-700">Amount</label>
                 <input
-                  type="text"
+                  type="number"
                   name="amount"
-                  placeholder="$ 000.00"
-                  className="input input-bordered w-full"
+                  value={records.amount}
+                  onChange={handleInputChange}
+                  placeholder="₮ 000"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200"
                   required
                 />
               </div>
 
-              <div className="col-span-2">
-                <label className="block text-gray-600 mb-2">Category</label>
+              <div className="mb-4">
+                <label className="block text-gray-700">Category</label>
+                <select
+                  name="category_id"
+                  value={records.category_id}
+                  onChange={handleInputChange}
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200"
+                  required
+                >
+                  <option value="">Choose</option>
+                  <option value="Food">Food</option>
+                  <option value="Rent">Rent</option>
+                </select>
+              </div>
+
+              <div className="flex mb-4">
+                <div className="flex-1 pr-2">
+                  <label className="block text-gray-700">Date</label>
+                  <input
+                    type="date"
+                    name="createdat"
+                    value={records.createdat}
+                    onChange={handleInputChange}
+                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200"
+                    required
+                  />
+                </div>
+                <div className="flex-1 pl-2">
+                  <label className="block text-gray-700">Time</label>
+                  <input
+                    type="time"
+                    name="createdatTime"
+                    value={records.createdatTime}
+                    onChange={handleInputChange}
+                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-gray-700">Payee</label>
                 <input
                   type="text"
-                  name="category"
-                  placeholder="Category"
-                  className="input input-bordered w-full"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-600 mb-2">Date</label>
-                <input
-                  type="date"
-                  name="date"
-                  className="input input-bordered w-full"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-600 mb-2">Time</label>
-                <input
-                  type="time"
-                  name="time"
-                  className="input input-bordered w-full"
-                  required
-                />
-              </div>
-
-              <div className="col-span-2">
-                <label className="block text-gray-600 mb-2">Note</label>
-                <textarea
-                  className="textarea textarea-bordered w-full"
-                  name="note"
+                  name="name"
+                  value={records.name}
+                  onChange={handleInputChange}
                   placeholder="Write here"
-                ></textarea>
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200"
+                  required
+                />
               </div>
 
-              <div className="modal-action col-span-2 flex justify-end mt-4">
-                <button
-                  type="submit"
-                  className={`${
-                    !isExpense
-                      ? "bg-green-600 text-white"
-                      : "bg-blue-600 text-white"
-                  } w-[120px] h-10 rounded-full transition-all`}
-                >
-                  Add Record
-                </button>
+              <div className="mb-4">
+                <label className="block text-gray-700">Note</label>
+                <textarea
+                  name="description"
+                  value={records.description}
+                  onChange={handleInputChange}
+                  placeholder="Write here"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200"
+                  rows="3"
+                />
               </div>
+
+              <button
+                type="submit"
+                className={`w-full py-2 text-white font-semibold rounded-lg ${
+                  transactionType === "EXP"
+                    ? "bg-blue-600 hover:bg-blue-700"
+                    : "bg-green-600 hover:bg-green-700"
+                } transition duration-200`}
+              >
+                Add Record
+              </button>
             </form>
           </div>
         </dialog>
-
-        <div className="mt-6">
-          {todayRecords.length > 0 && (
-            <>
-              <h2 className="text-lg font-bold">Today</h2>
-              <div className="flex flex-col gap-4 mt-2">
-                {todayRecords.map((record, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center p-4 bg-gray-100 rounded-md"
-                  >
-                    <div className="flex items-center gap-4">
-                      <span className="bg-red-500 text-white p-2 rounded-full">
-                        🍽️
-                      </span>
-                      <div>
-                        <p className="font-semibold">{record.category}</p>
-                        <p className="text-sm text-gray-500">{record.time}</p>
-                      </div>
-                    </div>
-                    <div className="text-red-500 font-bold">
-                      - $ {record.amount}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-
-          {yesterdayRecords.length > 0 && (
-            <>
-              <h2 className="text-lg font-bold mt-6">Yesterday</h2>
-              <div className="flex flex-col gap-4 mt-2">
-                {yesterdayRecords.map((record, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center p-4 bg-gray-100 rounded-md"
-                  >
-                    <div className="flex items-center gap-4">
-                      <span className="bg-red-500 text-white p-2 rounded-full">
-                        🍽️
-                      </span>
-                      <div>
-                        <p className="font-semibold">{record.category}</p>
-                        <p className="text-sm text-gray-500">{record.time}</p>
-                      </div>
-                    </div>
-                    <div className="text-red-500 font-bold">
-                      - $ {record.amount}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
+        <label className="input input-bordered flex items-center gap-2">
+          <input type="text" className="grow" placeholder="Search" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            className="h-4 w-4 opacity-70"
+          >
+            <path
+              fillRule="evenodd"
+              d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </label>
+        <Type />
       </div>
     </div>
   );

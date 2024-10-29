@@ -256,14 +256,14 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/records", async (req, res) => {
-  const { name, amount, transaction_type } = req.body;
+  const { name, amount, transaction_type, description, createdat } = req.body;
   console.log("req body", req.body);
 
   try {
     const records = await sql`
 
-      INSERT INTO "record" (name , amount, transaction_type)
-      VALUES (${name},${amount},${transaction_type})
+      INSERT INTO "record" (name , amount, transaction_type , description, createdat)
+      VALUES (${name},${amount},${transaction_type},${description},${createdat})
             RETURNING *
     `;
     console.log("records", records);

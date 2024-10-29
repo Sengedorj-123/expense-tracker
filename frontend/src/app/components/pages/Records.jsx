@@ -1,10 +1,37 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { RecordCard } from "../card/Record";
 
 export const RecordsPage = () => {
+  const [records, setRecords] = useState([]);
+  const [error, setError] = useState(null);
+
+  const fetchRecords = async () => {
+    try {
+      const response = await fetch(`http://localhost:3030/records`);
+      if (!response.ok)
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      const responseData = await response.json();
+      setRecords(responseData);
+    } catch (error) {
+      console.error(error);
+      setError("Error occurred while fetching records.");
+    }
+  };
+
+  const addRecord = (newRecord) => {
+    setRecords((prevRecords) => [...prevRecords, newRecord]);
+  };
+
+  useEffect(() => {
+    fetchRecords();
+  }, [addRecord]);
+
   return (
     <div className="container m-auto pt-[50px] flex">
       <div className="w-[25%]">
-        <RecordCard />.
+        <RecordCard onAddRecord={addRecord} />
       </div>
       <div className="pl-[50px] w-[75%]">
         <div className="flex justify-between ">
@@ -55,15 +82,33 @@ export const RecordsPage = () => {
         <div className="py-[20px] ">
           <h1 className="font-[600]">Today</h1>
           <div className="flex flex-col gap-[20px] pt-[20px]">
-            <div className="card bg-base-300 rounded-box grid h-[60px]  place-items-center">
-              content
-            </div>
-            <div className="card bg-base-300 rounded-box grid h-[60px]  place-items-center">
-              content
-            </div>
-            <div className="card bg-base-300 rounded-box grid h-[60px] place-items-center">
-              content
-            </div>
+            {records.length > 0 ? (
+              records.map((record, index) => (
+                <div
+                  key={index}
+                  className="card bg-base-100 rounded-box h-15 flex flex-col mt-4"
+                >
+                  <div className="flex items-center justify-between p-3">
+                    {record.category_id}
+                    <p>{record.name}</p>
+                    <p
+                      className={`flex items-center p-3 font-bold ${
+                        record.transaction_type === "EXP"
+                          ? "text-red-600"
+                          : "text-green-600"
+                      }`}
+                    >
+                      {record.transaction_type === "EXP" ? "-" : "+"}{" "}
+                      {record.amount}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="flex justify-center">
+                <span className="loading loading-infinity w-[60px] text-info"></span>
+              </div>
+            )}
           </div>
         </div>
         <div className="py-[20px] ">
@@ -84,4 +129,3 @@ export const RecordsPage = () => {
     </div>
   );
 };
-
