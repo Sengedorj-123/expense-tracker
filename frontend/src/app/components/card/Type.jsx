@@ -5,25 +5,26 @@ export const Type = () => {
       <div className="flex flex-col gap-[15px] pt-[20px]">
         <div className="flex items-center gap-[5px]">
           <input
-            type="checkbox"
+            type="radio"
             defaultChecked
-            className="checkbox checkbox-xs"
+            name="radio-1"
+            className="radio w-[20px] h-[20px]"
           />
           <h1>All</h1>
         </div>
         <div className="flex items-center gap-[5px]">
           <input
-            type="checkbox"
-            defaultChecked
-            className="checkbox checkbox-xs"
+            type="radio"
+            name="radio-1"
+            className="radio w-[20px] h-[20px]"
           />
           <h1>Income</h1>
         </div>
         <div className="flex items-center gap-[5px]">
           <input
-            type="checkbox"
-            defaultChecked
-            className="checkbox checkbox-xs"
+            type="radio"
+            name="radio-1"
+            className="radio w-[20px] h-[20px]"
           />
           <h1>Expense</h1>
         </div>
@@ -101,4 +102,6 @@ export const Type = () => {
     </div>
   );
 };
+Type.js;
+Type.js;
 Type.js;

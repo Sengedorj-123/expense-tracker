@@ -1,4 +1,3 @@
-
 "use client";
 import Dashboard from "@/app/dashboard/page";
 import { GeldIcon } from "../icons/Geld";

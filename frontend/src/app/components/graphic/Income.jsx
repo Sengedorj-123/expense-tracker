@@ -1,11 +1,3 @@
-// export const IncomeGraphic = () => {
-//   return (
-//     <div className="flex w-[45%] flex-col lg:flex-row">
-//       <div className="card bg-white rounded-box grid h-[320px] flex-grow place-items-center"></div>
-//     </div>
-//   );
-// };
-// IncomeExpenseChart.js
 "use client";
 import React from "react";
 import { Bar } from "react-chartjs-2";

@@ -1,6 +1,6 @@
 import { CashCard } from "../card/Cash";
-import { ExpensesCard } from "../card/Expenses";
-import { IncomeCard } from "../card/Income";
+import { ExpensesCard } from "../card/Income";
+import { IncomeCard } from "../card/Expense";
 
 import { ExpenseGraphic } from "../graphic/Expense";
 import { IncomeGraphic } from "../graphic/Income";

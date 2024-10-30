@@ -129,3 +129,5 @@ export const RecordsPage = () => {
     </div>
   );
 };
+RecordsPage.js
+RecordsPage.js
