@@ -5,7 +5,7 @@ export default function Records() {
   return (
     <div>
       <HeaderPart />
-      <div className="bg-[#F3F4F6]">
+      <div className="bg-[#F3F4F6] h-[92vh]">
         <RecordsPage />
       </div>
     </div>

@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Type } from "./Type";
 
 export const RecordCard = ({ onAddRecord }) => {
   const [transactionType, setTransactionType] = useState("EXP");
+
   const [records, setRecords] = useState({
     name: "",
     amount: "",
@@ -61,11 +62,9 @@ export const RecordCard = ({ onAddRecord }) => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 mx-auto">
-        <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">
-          Add Record
-        </h2>
+    <div className="flex w-full  ">
+      <div className=" container m-auto bg-white pt-[20px] px-[50px] mx-auto rounded-[12px]">
+        <h2 className="text-2xl font-bold mb-4  text-gray-800"> Records</h2>
 
         <button
           className="mb-4 py-2 px-4 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition duration-200  w-full"
@@ -221,7 +220,6 @@ export const RecordCard = ({ onAddRecord }) => {
             />
           </svg>
         </label>
-        <Type />
       </div>
     </div>
   );

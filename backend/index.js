@@ -14,7 +14,6 @@ app.use(bodyParser.json());
 const port = 3030;
 const sql = neon(`${process.env.DATABASE_URL}`);
 
-// User signup
 app.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -44,7 +43,6 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-// User login
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -98,6 +96,42 @@ app.get("/records", async (req, res) => {
   try {
     const records = await sql`SELECT * FROM "record" ORDER BY createdAt DESC`;
     res.status(200).json(records);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Internal server error during fetching records" });
+  }
+});
+app.post("/category", async (req, res) => {
+  const { name, description, category_icon, icon_color } = req.body;
+  console.log("req body", req.body);
+
+  try {
+    const category = await sql`
+
+      INSERT INTO "category" (name ,  description, category_icon , icon_color)
+      VALUES (${name} ,${description},${category_icon}, ${icon_color})
+            RETURNING *
+    `;
+    console.log("category", category);
+
+    res
+      .status(201)
+      .json({ message: "category added successfully", category: category[0] });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Internal server error during category creation" });
+  }
+});
+
+app.get("/category", async (req, res) => {
+  try {
+    const category =
+      await sql`SELECT * FROM "category" ORDER BY createdAt DESC`;
+    res.status(200).json(category);
   } catch (error) {
     console.error(error);
     res

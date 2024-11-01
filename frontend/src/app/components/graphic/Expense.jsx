@@ -9,7 +9,7 @@ export const ExpenseGraphic = () => {
     datasets: [
       {
         label: "Income - Expense",
-        data: [220000, 500000, 100000, 200000, 300000],
+        data: [220000, 500000, 29999, 200000, 300000],
         backgroundColor: [
           "#3366CC",
           "#FF6666",
