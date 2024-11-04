@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Type } from "./Type";
 
 export const RecordCard = ({ onAddRecord }) => {
   const [transactionType, setTransactionType] = useState("EXP");
-
+  const [categories, setCategories] = useState([]);
   const [records, setRecords] = useState({
     name: "",
     amount: "",
@@ -15,6 +14,23 @@ export const RecordCard = ({ onAddRecord }) => {
     createdat: "",
     createdatTime: "",
   });
+
+  useEffect(() => {
+    fetchCategory();
+  }, []);
+
+  const fetchCategory = async () => {
+    try {
+      const response = await fetch(`http://localhost:3030/category`);
+      if (!response.ok)
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      const responseData = await response.json();
+      setCategories(responseData);
+    } catch (error) {
+      console.error(error);
+      alert("Error occurred while fetching categories.");
+    }
+  };
 
   const toggleTransactionType = (type) => {
     setTransactionType(type);
@@ -44,30 +60,33 @@ export const RecordCard = ({ onAddRecord }) => {
       const data = await response.json();
       console.log("Record added successfully:", data);
       onAddRecord(data);
-
-      setRecords({
-        name: "",
-        amount: "",
-        transaction_type: transactionType,
-        category_id: "",
-        description: "",
-        createdat: "",
-        createdatTime: "",
-      });
-
+      resetForm();
       document.getElementById("my_modal_record").close();
     } catch (error) {
       console.error("Error adding record:", error);
+      alert("Error adding record.");
     }
   };
 
+  const resetForm = () => {
+    setRecords({
+      name: "",
+      amount: "",
+      transaction_type: transactionType,
+      category_id: "",
+      description: "",
+      createdat: "",
+      createdatTime: "",
+    });
+  };
+
   return (
-    <div className="flex w-full  ">
-      <div className=" container m-auto bg-white pt-[20px] px-[50px] mx-auto rounded-[12px]">
-        <h2 className="text-2xl font-bold mb-4  text-gray-800"> Records</h2>
+    <div className="flex w-full">
+      <div className="container m-auto bg-white pt-[20px] px-[50px] rounded-[12px]">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Records</h2>
 
         <button
-          className="mb-4 py-2 px-4 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition duration-200  w-full"
+          className="mb-4 py-2 px-4 bg-blue-600 text-white rounded-[20px] shadow hover:bg-blue-700 transition duration-200 w-full"
           onClick={() => document.getElementById("my_modal_record").showModal()}
         >
           Add Record
@@ -137,8 +156,11 @@ export const RecordCard = ({ onAddRecord }) => {
                   required
                 >
                   <option value="">Choose</option>
-                  <option value="Food">Food</option>
-                  <option value="Rent">Rent</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -205,6 +227,7 @@ export const RecordCard = ({ onAddRecord }) => {
             </form>
           </div>
         </dialog>
+
         <label className="input input-bordered flex items-center gap-2">
           <input type="text" className="grow" placeholder="Search" />
           <svg

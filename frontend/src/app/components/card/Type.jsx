@@ -1,7 +1,7 @@
 export const Type = ({ onFilterChange }) => {
   return (
     <div className="pt-[30px] pl-[50px]">
-      <h1>Types</h1>
+      <h1 className="font-[600]">Types</h1>
       <div className="flex flex-col gap-[15px] pt-[20px]">
         <div className="flex items-center gap-[5px]">
           <input

@@ -23,7 +23,7 @@ export const RecordsPage = () => {
   const [filterType, setFilterType] = useState("All");
   const [loading, setLoading] = useState(true);
 
-  const iconComponents = {
+  const icons = {
     Home: FaHome,
     User: FaUser,
     Car: FaCar,
@@ -90,8 +90,9 @@ export const RecordsPage = () => {
         <div className="w-full">
           <Type onFilterChange={setFilterType} />
         </div>
-        <div className="w-full pl-[50px] pt-[20px]">
-          <h1>Category</h1>
+        <div className="w-full px-[50px] pt-[20px] flex justify-between">
+          <h1 className="font-[ 600]">Category</h1>
+          <button className="text-[#dddddd]">Clear</button>
         </div>
 
         <ul className="w-full p-4 h-[43vh] overflow-auto">
@@ -132,7 +133,7 @@ export const RecordsPage = () => {
             <div className="flex items-center gap-[10px]">
               <img
                 className="w-[20px]"
-                src="https://cdn-icons-png.flaticon.com/128/17486/17486331.png"
+                src="https://cdn-icons-png.flaticon.com/128/2377/2377839.png"
                 alt=""
               />
               Add Category
@@ -192,32 +193,53 @@ export const RecordsPage = () => {
         <div className="py-[20px]">
           <h1 className="font-[600]">Today</h1>
           <div className="flex flex-col gap-[20px] pt-[20px] h-[40vh] overflow-auto">
-            {loading ? (
-              <div className="flex justify-center">
-                <span className="loading loading-infinity w-[60px] text-info"></span>
-              </div>
-            ) : records.length > 0 ? (
-              filteredRecords.map((record, index) => (
-                <div
-                  key={index}
-                  className="card bg-base-100 rounded-box h-15 flex flex-col mt-4"
-                >
-                  <div className="flex items-center justify-between p-3">
-                    {record.category_id}
-                    <p>{record.name}</p>
-                    <p
-                      className={`flex items-center p-3 font-bold ${
-                        record.transaction_type === "EXP"
-                          ? "text-red-600"
-                          : "text-green-600"
-                      }`}
-                    >
-                      {record.transaction_type === "EXP" ? "-" : "+"}{" "}
-                      {record.amount}
-                    </p>
+            {records.length > 0 ? (
+              filteredRecords.map((record, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="card bg-base-100 rounded-box h-15 flex flex-col mt-4"
+                  >
+                    <div className="flex items-center justify-between p-3">
+                      <div>
+                        <div className="flex gap-8">
+                          {categories.map((category) => {
+                            if (category.id === record.category_id) {
+                              const IconComponent =
+                                icons[category.category_icon]; // Get the icon component
+                              return (
+                                <span
+                                  key={category.id}
+                                  className={`p-2 rounded-lg ${category.icon_color}`}
+                                >
+                                  {IconComponent ? (
+                                    <IconComponent />
+                                  ) : (
+                                    <span>No Icon</span>
+                                  )}
+                                  {/* Render the icon component */}
+                                </span>
+                              );
+                            }
+                            return null;
+                          })}
+                        </div>
+                      </div>
+                      <p>{record.name}</p>
+                      <p
+                        className={`flex items-center p-3 font-bold ${
+                          record.transaction_type === "EXP"
+                            ? "text-red-600"
+                            : "text-green-600"
+                        }`}
+                      >
+                        {record.transaction_type === "EXP" ? "-" : "+"}{" "}
+                        {record.amount}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <div className="flex justify-center">
                 <p>No records found.</p>
