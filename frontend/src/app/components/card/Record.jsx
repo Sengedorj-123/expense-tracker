@@ -89,7 +89,7 @@ export const RecordCard = ({ onAddRecord }) => {
           className="mb-4 py-2 px-4 bg-blue-600 text-white rounded-[20px] shadow hover:bg-blue-700 transition duration-200 w-full"
           onClick={() => document.getElementById("my_modal_record").showModal()}
         >
-          Add Record
+          + Add
         </button>
 
         <dialog id="my_modal_record" className="modal">

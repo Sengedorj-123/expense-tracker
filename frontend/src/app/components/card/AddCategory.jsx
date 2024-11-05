@@ -50,6 +50,9 @@ export const AddCategoryInRecord = () => {
     "bg-orange-500",
     "bg-purple-500",
     "bg-red-500",
+    "bg-[#fc466b]",
+    "bg-[#46fcec]",
+    "bg-[#a7fc46]",
   ];
 
   const handleClickIcon = (icon, name) => {

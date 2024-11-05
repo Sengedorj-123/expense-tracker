@@ -69,14 +69,21 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/records", async (req, res) => {
-  const { name, amount, transaction_type, description, createdat } = req.body;
+  const {
+    name,
+    amount,
+    transaction_type,
+    description,
+    createdat,
+    category_id,
+  } = req.body;
   console.log("req body", req.body);
 
   try {
     const records = await sql`
 
-      INSERT INTO "record" (name , amount, transaction_type , description, createdat)
-      VALUES (${name},${amount},${transaction_type},${description},${createdat})
+      INSERT INTO "record" (name , amount, transaction_type , description, createdat, category_id )
+      VALUES (${name},${amount},${transaction_type},${description},${createdat}, ${category_id})
             RETURNING *
     `;
     console.log("records", records);
@@ -111,7 +118,7 @@ app.post("/category", async (req, res) => {
     const category = await sql`
 
       INSERT INTO "category" (name ,  description, category_icon , icon_color)
-      VALUES (${name} ,${description},${category_icon}, ${icon_color})
+      VALUES (${name} ,${description},${category_icon}, ${icon_color} )
             RETURNING *
     `;
     console.log("category", category);
