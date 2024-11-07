@@ -89,14 +89,14 @@ export const AddCategoryInRecord = () => {
 
       const data = await response.json();
       console.log("Category added:", data);
-      document.getElementById("my_modal_39").close(); // Close the modal after submission
+      document.getElementById("my_modal_39").close();
     } catch (error) {
       console.error("Error occurred during submission:", error);
     }
   };
 
   const closeModal = () => {
-    document.getElementById("my_modal_39").close(); // Close modal function
+    document.getElementById("my_modal_39").close();
   };
 
   return (

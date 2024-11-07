@@ -41,7 +41,6 @@ export const ExpenseGraphic = () => {
         borderRadius: "12px",
         boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
         width: "50%",
-        // margin: "auto",
       }}
     >
       <h3 style={{ marginBottom: "10px", textAlign: "center" }}>

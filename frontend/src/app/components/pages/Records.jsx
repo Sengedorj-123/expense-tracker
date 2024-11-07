@@ -4,7 +4,6 @@ import { RecordCard } from "../card/Record";
 import { Type } from "../card/Type";
 import { AddCategoryInRecord } from "../card/AddCategory";
 import React from "react";
-
 import {
   FaHome,
   FaUser,
@@ -29,6 +28,7 @@ export const RecordsPage = () => {
   const [filterType, setFilterType] = useState("All");
   const [filterCat, setFilterCat] = useState("");
   const [loading, setLoading] = useState(true);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const icons = {
     Home: FaHome,
@@ -40,7 +40,7 @@ export const RecordsPage = () => {
     Food: PiBowlFoodFill,
     Exam: PiExamFill,
     Stock: RiStockLine,
-    Toiletpaper: FaToiletPaper,
+    ToiletPaper: FaToiletPaper,
     Road: FaRoad,
     Wallpaper: MdWallpaper,
     Computer: FaComputer,
@@ -93,13 +93,29 @@ export const RecordsPage = () => {
     fetchCategory();
   }, []);
 
-  // Filter records by type
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategories((prevSelected) =>
+      prevSelected.includes(categoryId)
+        ? prevSelected.filter((id) => id !== categoryId)
+        : [...prevSelected, categoryId]
+    );
+  };
+
   const filteredRecords = records.filter((record) => {
-    if (filterType === "All") return true;
-    return record.transaction_type === filterType;
+    if (filterType !== "All" && record.transaction_type !== filterType) {
+      return false;
+    }
+
+    if (
+      selectedCategories.length > 0 &&
+      !selectedCategories.includes(record.category_id)
+    ) {
+      return false;
+    }
+
+    return true;
   });
 
-  // Filter categories by filterCat
   const filteredCategories = categories.filter((category) => {
     if (filterCat === "") return true;
     return category.name.toLowerCase().includes(filterCat.toLowerCase());
@@ -108,14 +124,49 @@ export const RecordsPage = () => {
   return (
     <div className="container m-auto pt-[50px] flex gap-[20px] h-[80vh]">
       <div className="w-[30%] h-[80vh] bg-white rounded-[12px] shadow-lg flex flex-col items-center">
+        <div className="w-full flex justify-start px-[50px] pt-[20px]">
+          <h2 className="text-2xl font-bold text-gray-800">Records</h2>
+        </div>
         <RecordCard onAddRecord={addRecord} />
+
+        <div className="w-full px-[50px]">
+          <label className="input input-bordered flex items-center gap-2 w-full">
+            <input
+              type="text"
+              className="grow"
+              placeholder="Search"
+              value={filterCat}
+              onChange={(e) => setFilterCat(e.target.value)}
+            />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+              className="h-4 w-4 opacity-70"
+            >
+              <path
+                fillRule="evenodd"
+                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </label>
+        </div>
+
         <div className="w-full">
           <Type onFilterChange={setFilterType} />
         </div>
 
         <div className="w-full px-[50px] pt-[20px] flex justify-between">
           <h1 className="font-[600]">Category</h1>
-          <button className="text-[#dddddd]" onClick={() => setFilterCat("")}>
+
+          <button
+            className="text-[#dddddd]"
+            onClick={() => {
+              setFilterCat("");
+              console.log("Filter cleared, current filterCat:", filterCat);
+            }}
+          >
             Clear
           </button>
         </div>
@@ -131,40 +182,17 @@ export const RecordsPage = () => {
         </div>
 
         <ul className="w-full p-4 h-[43vh] overflow-auto">
-          {filteredCategories.map((category, index) => (
-            <li key={index} className="flex items-center gap-2 p-2">
+          {filteredCategories.map((category) => (
+            <li key={category.id} className="flex items-center gap-2 p-2">
               <span
-                className={`px-[20px] rounded-full flex items-center gap-[5px] ${category.color}`}
+                className={`px-[20px] rounded-full flex items-center gap-[6px] ${category.color}`}
               >
-                <label className="swap swap-flip w-[35px] h-[35px]">
-                  <input
-                    type="checkbox"
-                    checked={category.isChecked || false} // Handle checkbox checked state
-                    onChange={(e) => {
-                      // Create a copy of the categories array to avoid mutating the original state
-                      const updatedCategories = [...categories];
-                      updatedCategories[index].isChecked = e.target.checked;
-                      setCategories(updatedCategories);
-                    }}
-                  />
-
-                  <div className="swap-off">
-                    <img
-                      className="w-[25px]"
-                      src="https://cdn-icons-png.flaticon.com/128/2767/2767146.png"
-                      alt="Icon when checked"
-                    />
-                  </div>
-
-                  <div className="swap-on">
-                    <img
-                      className="w-[25px]"
-                      src="https://cdn-icons-png.flaticon.com/128/159/159604.png"
-                      alt="Icon when unchecked"
-                    />
-                  </div>
-                </label>
-
+                <input
+                  type="checkbox"
+                  className="checkbox w-[20px] h-[20px]"
+                  checked={selectedCategories.includes(category.id)}
+                  onChange={() => handleCategoryChange(category.id)}
+                />
                 {category.name}
               </span>
             </li>
@@ -207,7 +235,6 @@ export const RecordsPage = () => {
               </svg>
             </button>
             <h1>Last 30 Days</h1>
-
             <button className="btn btn-square bg-[#E5E7EB]">
               <svg
                 width="20"
@@ -236,83 +263,84 @@ export const RecordsPage = () => {
           </div>
         </div>
 
-        {/* Records Display */}
         <div className="py-[20px]">
           <h1 className="font-[600]">Today</h1>
           <div className="flex flex-col gap-[20px] pt-[20px] h-[40vh] overflow-auto">
-            {records.length > 0 ? (
-              filteredRecords.map((record, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="card bg-base-100 rounded-box h-15 flex flex-col mt-4"
-                  >
-                    <div className="flex items-center justify-between p-3">
-                      <div className="flex items-center gap-[15px]">
-                        <div className="flex gap-8">
-                          {categories.map((category) => {
-                            if (category.id === record.category_id) {
-                              return (
-                                <span
-                                  key={category.id}
-                                  className={`p-2 w-[40px] h-[40px] rounded-lg flex items-center justify-center ${category.icon_color}`}
-                                >
-                                  {icons[
+            {loading ? (
+              <div className="flex justify-center">
+                <div className="flex flex-col justify-center items-center">
+                  <span className="loading loading-infinity text-info w-[50px]"></span>
+                  <h1>Loading...</h1>
+                </div>
+              </div>
+            ) : filteredRecords.length > 0 ? (
+              filteredRecords.map((record, index) => (
+                <div
+                  key={index}
+                  className="card bg-base-100 rounded-box h-15 flex flex-col mt-4"
+                >
+                  <div className="flex items-center justify-between p-3">
+                    <div className="flex items-center gap-[15px]">
+                      {categories.map((category) => {
+                        if (category.id === record.category_id) {
+                          return (
+                            <span
+                              key={category.id}
+                              className={`p-2 w-[40px] h-[40px] rounded-lg flex items-center justify-center ${category.icon_color}`}
+                            >
+                              {icons[
+                                category.category_icon.charAt(0).toUpperCase() +
+                                  category.category_icon.slice(1)
+                              ] &&
+                                React.createElement(
+                                  icons[
                                     category.category_icon
                                       .charAt(0)
                                       .toUpperCase() +
                                       category.category_icon.slice(1)
-                                  ] &&
-                                    React.createElement(
-                                      icons[
-                                        category.category_icon
-                                          .charAt(0)
-                                          .toUpperCase() +
-                                          category.category_icon.slice(1)
-                                      ]
-                                    )}
-                                </span>
-                              );
+                                  ]
+                                )}
+                            </span>
+                          );
+                        }
+                        return null;
+                      })}
+                      <div className="flex flex-col">
+                        <p className="font-[600] text-black text-[13px]">
+                          {record.name}
+                        </p>
+                        <p>
+                          {new Date(record.createdat).toLocaleDateString(
+                            "en-US",
+                            {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                              weekday: "short",
                             }
-
-                            return null;
-                          })}
-                        </div>
-                        <div className="flex flex-col">
-                          <p className="font-[600] text-black text-[13px]">
-                            {record.name}
-                          </p>
-                          <p>
-                            {new Date(record.createdat).toLocaleDateString(
-                              "en-US",
-                              {
-                                day: "numeric",
-                                month: "short",
-                                year: "numeric",
-                                weekday: "short",
-                              }
-                            )}
-                          </p>
-                        </div>
+                          )}
+                        </p>
                       </div>
-
-                      <p
-                        className={`flex items-center p-3 font-bold ${
-                          record.transaction_type === "EXP"
-                            ? "text-red-600"
-                            : "text-green-600"
-                        }`}
-                      >
-                        {record.transaction_type === "EXP" ? "-" : "+"}{" "}
-                        {record.amount}
-                      </p>
                     </div>
+                    <div className="flex flex-col"></div>
+                    <p
+                      className={`flex items-center p-3 font-bold ${
+                        record.transaction_type === "EXP"
+                          ? "text-red-600"
+                          : "text-green-600"
+                      }`}
+                    >
+                      {record.transaction_type === "EXP" ? "-" : "+"}{" "}
+                      {record.amount} ₮
+                    </p>
                   </div>
-                );
-              })
+                </div>
+              ))
             ) : (
               <div className="flex justify-center">
-                <p>No records found.</p>
+                <div className="flex flex-col justify-center items-center">
+                  <h1 className="text-red-600">No records available</h1>
+                </div>
               </div>
             )}
           </div>

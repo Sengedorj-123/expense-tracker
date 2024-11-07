@@ -22,8 +22,9 @@ export const RecordCard = ({ onAddRecord }) => {
   const fetchCategory = async () => {
     try {
       const response = await fetch(`http://localhost:3030/category`);
-      if (!response.ok)
+      if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
+      }
       const responseData = await response.json();
       setCategories(responseData);
     } catch (error) {
@@ -45,6 +46,17 @@ export const RecordCard = ({ onAddRecord }) => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
+    if (!records.createdat || !records.createdatTime) {
+      const now = new Date();
+      const date = now.toISOString().split("T")[0];
+      const time = now.toTimeString().split(" ")[0];
+      setRecords((prevRecords) => ({
+        ...prevRecords,
+        createdat: date,
+        createdatTime: time,
+      }));
+    }
+
     try {
       const response = await fetch(`http://localhost:3030/records`, {
         method: "POST",
@@ -54,14 +66,17 @@ export const RecordCard = ({ onAddRecord }) => {
         body: JSON.stringify(records),
       });
 
-      if (!response.ok)
+      if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
       const data = await response.json();
       console.log("Record added successfully:", data);
-      onAddRecord(data);
+
       resetForm();
-      document.getElementById("my_modal_record").close();
+
+      const modal = document.getElementById("my_modal_record");
+      if (modal) modal.close();
     } catch (error) {
       console.error("Error adding record:", error);
       alert("Error adding record.");
@@ -83,13 +98,11 @@ export const RecordCard = ({ onAddRecord }) => {
   return (
     <div className="flex w-full">
       <div className="container m-auto bg-white pt-[20px] px-[50px] rounded-[12px]">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">Records</h2>
-
         <button
           className="mb-4 py-2 px-4 bg-blue-600 text-white rounded-[20px] shadow hover:bg-blue-700 transition duration-200 w-full"
           onClick={() => document.getElementById("my_modal_record").showModal()}
         >
-          + Add
+          + Record
         </button>
 
         <dialog id="my_modal_record" className="modal">
@@ -227,22 +240,6 @@ export const RecordCard = ({ onAddRecord }) => {
             </form>
           </div>
         </dialog>
-
-        <label className="input input-bordered flex items-center gap-2">
-          <input type="text" className="grow" placeholder="Search" />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path
-              fillRule="evenodd"
-              d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </label>
       </div>
     </div>
   );
