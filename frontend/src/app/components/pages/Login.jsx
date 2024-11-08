@@ -26,13 +26,16 @@ export const Login = () => {
     onSubmit: async (values) => {
       setErrorMessage("");
       try {
-        const response = await fetch("http://localhost:3030/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        });
+        const response = await fetch(
+          "https://expense-tracker-umx8.onrender.com",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+          }
+        );
 
         const data = await response.json();
         console.log("email", values.email);

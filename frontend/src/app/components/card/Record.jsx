@@ -21,7 +21,7 @@ export const RecordCard = ({ onAddRecord }) => {
 
   const fetchCategory = async () => {
     try {
-      const response = await fetch(`http://localhost:3030/category`);
+      const response = await fetch(`https://expense-tracker-umx8.onrender.com`);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -58,13 +58,16 @@ export const RecordCard = ({ onAddRecord }) => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3030/records`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(records),
-      });
+      const response = await fetch(
+        `https://expense-tracker-umx8.onrender.com`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(records),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

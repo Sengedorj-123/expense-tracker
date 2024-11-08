@@ -82,7 +82,10 @@ export const AddCategoryInRecord = () => {
         body: JSON.stringify(category),
       };
 
-      const response = await fetch(`http://localhost:3030/category`, options);
+      const response = await fetch(
+        `https://expense-tracker-umx8.onrender.com`,
+        options
+      );
 
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
