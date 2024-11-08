@@ -118,7 +118,7 @@ export const DashboardPage = () => {
         </div>
       </div>
       <div className="pt-[30px]">
-        <div className="card bg-white rounded-box grid h-[600px] flex-grow place-items-center ">
+        <div className="card bg-white rounded-box  h-[600px] flex-grow place-items-center ">
           <div className="w-full flex justify-start h-[70px] border rounded-t-[12px] items-center">
             <h1 className="font-[600] text-[25px] pl-[20px]">Last Records</h1>
           </div>
