@@ -148,5 +148,5 @@ app.get("/category", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`https://render.com/docs/web-services#port-binding`);
 });
