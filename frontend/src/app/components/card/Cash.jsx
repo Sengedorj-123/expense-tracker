@@ -3,7 +3,7 @@ import { WhiteGeldIcon } from "../icons/WhiteGeld";
 
 export const CashCard = () => {
   return (
-    <div className="flex w-[30%] flex-col lg:flex-row ">
+    <div className="flex w-[30%] flex-col lg:flex-row rounded-box shadow-custom  ">
       <div className="card bg-blue-600  rounded-box grid h-[250px] flex-grow ">
         <div className="w-full pl-[40px] pt-[40px] flex justify-start h-[20%] items-center gap-[10px]">
           <WhiteGeldIcon />

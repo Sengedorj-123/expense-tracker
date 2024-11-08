@@ -2,7 +2,7 @@ import { IncomeIcon } from "../icons/Income";
 
 export const IncomeCard = () => {
   return (
-    <div className="flex w-[30%] flex-col lg:flex-row ">
+    <div className="flex w-[30%] flex-col lg:flex-row shadow-custom rounded-box">
       <div className="card bg-white  rounded-box h-[250px] flex-grow ">
         <div className="w-full h-[20%] ">
           <div className="flex items-center gap-[5px] pt-[10px] pl-[20px]">

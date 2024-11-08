@@ -130,14 +130,8 @@ export const RecordsPage = () => {
         <RecordCard onAddRecord={addRecord} />
 
         <div className="w-full px-[50px]">
-          <label className="input input-bordered flex items-center gap-2 w-full">
-            <input
-              type="text"
-              className="grow"
-              placeholder="Search"
-              value={filterCat}
-              onChange={(e) => setFilterCat(e.target.value)}
-            />
+          <label className="input input-bordered flex items-center gap-2">
+            <input type="text" className="grow" placeholder="Search" />
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"

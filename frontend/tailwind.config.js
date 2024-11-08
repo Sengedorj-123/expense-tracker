@@ -13,6 +13,13 @@ module.exports = {
       },
     },
   },
+  theme: {
+    extend: {
+      boxShadow: {
+        custom: "0 4px 15px rgba(0, 0, 0, 0.1)",
+      },
+    },
+  },
   plugins: [require("daisyui")],
 
   // daisyUI config (optional - here are the default values)
@@ -26,5 +33,4 @@ module.exports = {
     logs: true, // Shows info about daisyUI version and used config in the console when building your CSS
     themeRoot: ":root", // The element that receives theme color CSS variables
   },
-  
 };
