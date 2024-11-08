@@ -83,7 +83,7 @@ export const AddCategoryInRecord = () => {
       };
 
       const response = await fetch(
-        `https://expense-tracker-umx8.onrender.com`,
+        `https://expense-tracker-umx8.onrender.com/category`,
         options
       );
 

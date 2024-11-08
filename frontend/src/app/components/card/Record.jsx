@@ -21,7 +21,9 @@ export const RecordCard = ({ onAddRecord }) => {
 
   const fetchCategory = async () => {
     try {
-      const response = await fetch(`https://expense-tracker-umx8.onrender.com`);
+      const response = await fetch(
+        `https://expense-tracker-umx8.onrender.com/category`
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -59,7 +61,7 @@ export const RecordCard = ({ onAddRecord }) => {
 
     try {
       const response = await fetch(
-        `https://expense-tracker-umx8.onrender.com`,
+        `https://expense-tracker-umx8.onrender.com/records`,
         {
           method: "POST",
           headers: {

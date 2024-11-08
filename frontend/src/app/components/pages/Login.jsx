@@ -27,7 +27,7 @@ export const Login = () => {
       setErrorMessage("");
       try {
         const response = await fetch(
-          "https://expense-tracker-umx8.onrender.com",
+          "https://expense-tracker-umx8.onrender.com/login",
           {
             method: "POST",
             headers: {

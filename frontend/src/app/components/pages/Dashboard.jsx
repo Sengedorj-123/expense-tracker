@@ -55,7 +55,9 @@ export const DashboardPage = () => {
   const fetchRecords = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`https://expense-tracker-umx8.onrender.com`);
+      const response = await fetch(
+        `https://expense-tracker-umx8.onrender.com/records`
+      );
       if (!response.ok)
         throw new Error(`HTTP error! Status: ${response.status}`);
       const responseData = await response.json();
@@ -71,7 +73,9 @@ export const DashboardPage = () => {
   const fetchCategory = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`https://expense-tracker-umx8.onrender.com`);
+      const response = await fetch(
+        `hhttps://expense-tracker-umx8.onrender.com/category`
+      );
       if (!response.ok)
         throw new Error(`HTTP error! Status: ${response.status}`);
       const responseData = await response.json();

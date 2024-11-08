@@ -33,7 +33,7 @@ export const Signup = () => {
     onSubmit: async (values) => {
       try {
         const response = await fetch(
-          "https://expense-tracker-umx8.onrender.com",
+          "https://expense-tracker-umx8.onrender.com/signup",
           {
             method: "POST",
             headers: {
