@@ -38,9 +38,6 @@ export const Login = () => {
         );
 
         const data = await response.json();
-        console.log("email", values.email);
-        console.log("pass", values.password);
-        console.log("data", data);
 
         if (response.ok) {
           toast.success("Login successful!");
