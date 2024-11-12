@@ -74,7 +74,7 @@ export const DashboardPage = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `hhttps://expense-tracker-umx8.onrender.com/category`
+        `https://expense-tracker-umx8.onrender.com/category`
       );
       if (!response.ok)
         throw new Error(`HTTP error! Status: ${response.status}`);
